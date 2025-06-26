@@ -1,4 +1,3 @@
-// Function to create image item element
 function createImageItem(filename) {
     const imageItem = document.createElement('div');
     imageItem.className = 'image-item';
@@ -15,7 +14,6 @@ function createImageItem(filename) {
     imageItem.appendChild(img);
     imageItem.appendChild(filenameDiv);
     
-    // Add click event for download
     imageItem.addEventListener('click', () => {
         downloadImage(filename);
     });
@@ -23,7 +21,6 @@ function createImageItem(filename) {
     return imageItem;
 }
 
-// Function to download image
 function downloadImage(filename) {
     const link = document.createElement('a');
     link.href = `skyblockicons/v3/${filename}`;
@@ -33,24 +30,20 @@ function downloadImage(filename) {
     document.body.removeChild(link);
 }
 
-// Function to load all images dynamically
 function loadImages() {
     const imageGrid = document.getElementById('imageGrid');
     
-    // Add loading message
     const loadingDiv = document.createElement('div');
     loadingDiv.className = 'loading';
     loadingDiv.textContent = 'Loading images...';
     imageGrid.appendChild(loadingDiv);
     
-    // Try to fetch file list from server
     fetch('/api/files')
         .then(response => response.json())
         .then(data => {
             if (data.files && data.files.length > 0) {
                 displayImages(data.files);
             } else {
-                // Fallback: show a message that images are available
                 loadingDiv.textContent = 'Images are available! Click any image to download.';
                 loadingDiv.style.color = '#4CAF50';
                 addInfoMessage();
@@ -64,7 +57,6 @@ function loadImages() {
         });
 }
 
-// Function to display images in batches
 function displayImages(files) {
     const imageGrid = document.getElementById('imageGrid');
     const loadingElement = imageGrid.querySelector('.loading');
@@ -72,7 +64,6 @@ function displayImages(files) {
         loadingElement.remove();
     }
     
-    // Add info about total files
     const infoDiv = document.createElement('div');
     infoDiv.style.textAlign = 'center';
     infoDiv.style.color = '#4CAF50';
@@ -80,7 +71,6 @@ function displayImages(files) {
     infoDiv.innerHTML = `<p>Loaded ${files.length} images. Click any image to download.</p>`;
     imageGrid.appendChild(infoDiv);
     
-    // Load images in batches to avoid overwhelming the browser
     const batchSize = 50;
     let currentIndex = 0;
     
@@ -95,7 +85,6 @@ function displayImages(files) {
         currentIndex = endIndex;
         
         if (currentIndex < files.length) {
-            // Load next batch after a short delay
             setTimeout(loadBatch, 100);
         }
     }
@@ -103,7 +92,6 @@ function displayImages(files) {
     loadBatch();
 }
 
-// Function to add info message when server is not available
 function addInfoMessage() {
     const imageGrid = document.getElementById('imageGrid');
     const noteDiv = document.createElement('div');
@@ -112,8 +100,6 @@ function addInfoMessage() {
     noteDiv.style.margin = '20px 0';
     noteDiv.innerHTML = `
         <p>All images from the v3 folder are accessible.</p>
-        <p>To see all images, run: <code>python server.py</code> and visit <code>http://localhost:8000</code></p>
-        <p>Or simply open index.html directly in your browser.</p>
     `;
     imageGrid.appendChild(noteDiv);
 }
