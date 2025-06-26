@@ -9,14 +9,12 @@ PORT = 8000
 
 class ImageServer(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
-        # Handle API request for file list
         if self.path == '/api/files':
             self.send_response(200)
             self.send_header('Content-type', 'application/json')
             self.send_header('Access-Control-Allow-Origin', '*')
             self.end_headers()
             
-            # Get all files from v3 folder
             v3_path = 'skyblockicons/v3'
             if os.path.exists(v3_path):
                 files = [f for f in os.listdir(v3_path) if f.lower().endswith(('.png', '.gif', '.jpg', '.jpeg'))]
@@ -26,8 +24,7 @@ class ImageServer(http.server.SimpleHTTPRequestHandler):
                 response = json.dumps({'files': []})
                 self.wfile.write(response.encode())
             return
-        
-        # Serve static files normally
+
         super().do_GET()
 
 if __name__ == "__main__":
